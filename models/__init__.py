@@ -13,5 +13,6 @@ class User(Base,UserMixin):
     usu_id:Mapped[int] = mapped_column(primary_key=True)
     usu_nome:Mapped[str]
     usu_email:Mapped[str] = mapped_column(unique=True)
+    usu_senha:Mapped[str]
     usu_telefone:Mapped[str]
     

@@ -1,10 +1,15 @@
-from app import app
-from models import User
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from models import User,db
+from sqlalchemy import select
 
-login_manager = LoginManager()
-login_manager.init_app(app)
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.get(user_id)
+class Users:
+    def __init__(self,nome,email,senha,telefone):
+        self.nome = nome
+        self.email = email
+        self.senha = senha
+        self.telefone = telefone
+    
+    def save(self):
+        self.user = User(usu_nome=self.nome,usu_email=self.email,usu_senha=self.senha,usu_telefone=self.telefone)
+        db.session.add(self.user)
+        db.session.commit()
