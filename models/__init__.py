@@ -15,4 +15,8 @@ class User(Base,UserMixin):
     usu_email:Mapped[str] = mapped_column(unique=True)
     usu_senha:Mapped[str]
     usu_telefone:Mapped[str]
-    
+    def __init__(self):
+        pass
+
+    def get(self):
+        return self.usu_id

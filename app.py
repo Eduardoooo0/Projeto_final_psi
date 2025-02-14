@@ -18,8 +18,7 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-        return User.get(user_id)
-
+        return db.session.execute(db.select(User).filter_by(usu_id=user_id)).scalar_one_or_none()
 
 app.register_blueprint(users.bp)
 
