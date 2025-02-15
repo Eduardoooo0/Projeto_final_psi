@@ -1,15 +1,20 @@
-from models import User,db
-from sqlalchemy import select
+from models import db
+from datetime import datetime
+from sqlalchemy import Enum
+from flask_login import UserMixin
 
+class User(db.Model, UserMixin):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    senha = db.Column(db.String(255), nullable=False)
+    tipo = db.Column(db.Enum('admin', 'médico', 'paciente'), nullable=False)
+    data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
 
-class Users:
-    def __init__(self,nome,email,senha,telefone):
-        self.nome = nome
-        self.email = email
-        self.senha = senha
-        self.telefone = telefone
-    
     def save(self):
-        self.user = User(usu_nome=self.nome,usu_email=self.email,usu_senha=self.senha,usu_telefone=self.telefone)
-        db.session.add(self.user)
+        db.session.add(self)
         db.session.commit()
+
+    def get_id(self):
+        return self.id
