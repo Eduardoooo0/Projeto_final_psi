@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from models import db
-from models.User import User
+from models.user import User
 from controllers.user import user_bp
 from controllers.doctor import doctor_bp
 from controllers.patients import patients_bp
@@ -8,7 +8,7 @@ from flask_login import LoginManager
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SECRET_KEY'] = 'Popofilo'
+app.config['SECRET_KEY'] = 'xoxorroxupetao'
 
 db.init_app(app)
 

@@ -1,16 +1,18 @@
 from models import db
+from sqlalchemy.orm import Mapped, mapped_column
 from datetime import date
 
 class Paciente(db.Model):
     __tablename__ = 'pacientes'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    nome = db.Column(db.String(100), nullable=False)
-    idade = db.Column(db.Integer, nullable=False)
-    data_nascimento = db.Column(db.Date, nullable=False)
-    telefone = db.Column(db.String(20), nullable=False)
-    endereco = db.Column(db.String(200), nullable=False)
-    cartao_sus = db.Column(db.String(100), nullable=False)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    nome: Mapped[str] 
+    idade: Mapped[int] 
+    data_nascimento: Mapped[date] 
+    telefone: Mapped[str] 
+    endereco: Mapped[str] 
+    cartao_sus: Mapped[str] 
 
     def __init__(self, user_id, nome, idade, data_nascimento, telefone, endereco, cartao_sus):
         self.user_id = user_id

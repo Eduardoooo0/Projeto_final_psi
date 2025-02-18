@@ -1,7 +1,9 @@
 from models import db
+from sqlalchemy.orm import Mapped, mapped_column
 
 class Especialidade(db.Model):
     __tablename__ = 'especialidades'
-    id = db.Column(db.Integer, primary_key=True)
-    nome = db.Column(db.String(100), nullable=False)
-    descricao = db.Column(db.Text, nullable=True)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    nome: Mapped[str] 
+    descricao: Mapped[str] 

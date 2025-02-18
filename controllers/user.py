@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from models.User import User
+from models.user import User
 from models.Doctor import Medico
 from models.Patients import Paciente
 from models import db
@@ -17,15 +17,15 @@ def register():
         senha = request.form.get('senha')
         tipo = request.form.get('tipo')
         
-        hashed_password = generate_password_hash(senha, method='pbkdf2:sha256', salt_length=16)
-        new_user = User(nome=nome, email=email, senha=hashed_password, tipo=tipo)
-        db.session.add(new_user)
+        hash_senha = generate_password_hash(senha)
+        novo_user = User(nome=nome, email=email, senha=hash_senha, tipo=tipo)
+        db.session.add(novo_user)
         db.session.commit()
 
         if tipo == 'médico':
             especialidade = request.form.get('especialidade')
             crm = request.form.get('crm')
-            new_medico = Medico(user_id=new_user.id, especialidade=especialidade, crm=crm)
+            new_medico = Medico(user_id=novo_user.id, especialidade=especialidade, crm=crm)
             db.session.add(new_medico)
         elif tipo == 'paciente':
             idade = request.form.get('idade')
@@ -33,7 +33,7 @@ def register():
             telefone = request.form.get('telefone')
             endereco = request.form.get('endereco')
             cartao_sus = request.form.get('cartao_sus')
-            new_paciente = Paciente(user_id=new_user.id, nome=nome, idade=idade, data_nascimento=data_nascimento,
+            new_paciente = Paciente(user_id=novo_user.id, nome=nome, idade=idade, data_nascimento=data_nascimento,
                                     telefone=telefone, endereco=endereco, cartao_sus=cartao_sus)
             db.session.add(new_paciente)
 
@@ -70,4 +70,4 @@ def logout():
 @user_bp.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('index.html')
+    return render_template('home.html')
