@@ -13,11 +13,11 @@ def manage_pacientes():
         telefone = request.form.get('telefone')
         endereco = request.form.get('endereco')
         cartao_sus = request.form.get('cartao_sus')
-        new_paciente = Paciente(
+        novo_paciente = Paciente(
             nome=nome, idade=idade, data_nascimento=data_nascimento, 
             telefone=telefone, endereco=endereco, cartao_sus=cartao_sus
         )
-        db.session.add(new_paciente)
+        db.session.add(novo_paciente)
         db.session.commit()
         flash('Paciente adicionado com sucesso!')
         return redirect(url_for('patients.manage_pacientes'))

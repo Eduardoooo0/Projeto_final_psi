@@ -9,8 +9,8 @@ def manage_medicos():
     if request.method == 'POST':
         especialidade = request.form.get('especialidade')
         crm = request.form.get('crm')
-        new_medico = Medico(especialidade=especialidade, crm=crm)
-        db.session.add(new_medico)
+        novo_medico = Medico(especialidade=especialidade, crm=crm)
+        db.session.add(novo_medico)
         db.session.commit()
         flash('Médico adicionado com sucesso!')
         return redirect(url_for('doctor.manage_medicos'))

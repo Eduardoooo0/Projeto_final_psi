@@ -25,17 +25,17 @@ def register():
         if tipo == 'médico':
             especialidade = request.form.get('especialidade')
             crm = request.form.get('crm')
-            new_medico = Medico(user_id=novo_user.id, especialidade=especialidade, crm=crm)
-            db.session.add(new_medico)
+            novo_medico = Medico(user_id=novo_user.id, especialidade=especialidade, crm=crm)
+            db.session.add(novo_medico)
         elif tipo == 'paciente':
             idade = request.form.get('idade')
             data_nascimento = datetime.strptime(request.form.get('data_nascimento'), '%Y-%m-%d').date()
             telefone = request.form.get('telefone')
             endereco = request.form.get('endereco')
             cartao_sus = request.form.get('cartao_sus')
-            new_paciente = Paciente(user_id=novo_user.id, nome=nome, idade=idade, data_nascimento=data_nascimento,
+            novo_paciente = Paciente(user_id=novo_user.id, nome=nome, idade=idade, data_nascimento=data_nascimento,
                                     telefone=telefone, endereco=endereco, cartao_sus=cartao_sus)
-            db.session.add(new_paciente)
+            db.session.add(novo_paciente)
 
         db.session.commit()
         flash('Usuário registrado com sucesso!')

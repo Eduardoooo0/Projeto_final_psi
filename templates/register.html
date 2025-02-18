@@ -22,7 +22,6 @@
             <select id="tipo" name="tipo" class="form-control" required>
                 <option value="">Selecione</option>
                 <option value="admin">Admin</option>
-                <option value="médico">Médico</option>
                 <option value="paciente">Paciente</option>
             </select>
         </div>
@@ -34,19 +33,7 @@
         document.getElementById('tipo').addEventListener('change', function () {
             var extraFields = document.getElementById('extraFields');
             extraFields.innerHTML = '';
-
-            if (this.value === 'médico') {
-                extraFields.innerHTML = `
-                    <div class="form-group">
-                        <label for="especialidade">Especialidade:</label>
-                        <input type="text" id="especialidade" name="especialidade" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="crm">CRM:</label>
-                        <input type="text" id="crm" name="crm" class="form-control" required>
-                    </div>
-                `;
-            } else if (this.value === 'paciente') {
+            if (this.value === 'paciente') {
                 extraFields.innerHTML = `
                     <div class="form-group">
                         <label for="idade">Idade:</label>
