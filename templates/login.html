@@ -22,6 +22,11 @@
                 <option value="paciente">Paciente</option>
             </select>
         </div>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <p style="color: red;">{{messages[0]}}</p>
+            {% endif %}
+        {% endwith %}
         <div id="extraFields"></div>
         <button type="submit" class="btn btn-primary">Login</button>
     </form>

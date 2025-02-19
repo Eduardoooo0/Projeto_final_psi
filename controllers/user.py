@@ -49,15 +49,14 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         senha = request.form.get('senha')
+        tipo = request.form.get('tipo')
 
         user = User.query.filter_by(email=email).first()
-
-        if user and check_password_hash(user.senha, senha):
+        if user and check_password_hash(user.senha, senha) and tipo == user.tipo:
             login_user(user)
-            flash('Login realizado com sucesso!')
             return redirect(url_for('user.dashboard'))
-
         flash('Credenciais inválidas')
+        return redirect(url_for('user.login'))
     return render_template('login.html')
 
 @user_bp.route('/logout', methods=['GET', 'POST'])
