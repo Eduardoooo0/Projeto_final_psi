@@ -17,13 +17,25 @@
             <label for="senha">Senha:</label>
             <input type="password" id="senha" name="senha" class="form-control" required>
         </div>
-        <div class="form-group">
-            <label for="tipo">Tipo:</label>
-            <select id="tipo" name="tipo" class="form-control" required>
-                <option value="">Selecione</option>
-                <option value="paciente">Paciente</option>
-            </select>
-        </div>
+        {% if current_user.tipo == 'admin' %}
+            <div class="form-group">
+                <label for="tipo">Tipo:</label>
+                <select id="tipo" name="tipo" class="form-control" required>
+                    <option value="">Selecione</option>
+                    <option value="paciente">Paciente</option>
+                    <option value="medico">Médico</option>
+                </select>
+            </div>
+        {% else %}
+            <div class="form-group">
+                <label for="tipo">Tipo:</label>
+                <select id="tipo" name="tipo" class="form-control" required>
+                    <option value="">Selecione</option>
+                    <option value="paciente">Paciente</option>
+                </select>
+            </div>
+        {% endif %}
+        
         <div id="extraFields"></div>
         <button type="submit" class="btn btn-primary">Register</button>
     </form>
@@ -56,6 +68,14 @@
                     </div>
                 `;
             }
+            else if (this.value === 'medico') {
+                extraFields.innerHTML = `
+                    <div class="form-group">
+                        <label for="crm">CRM:</label>
+                        <input type="text" id="crm" name="crm" class="form-control" required>
+                    </div>
+                `;
+            }  
         });
     </script>
 {% endblock %}

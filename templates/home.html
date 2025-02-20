@@ -3,6 +3,12 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <h1>Bem vindo a Clinic!</h1>
-    <p>Essa é a pagina Home.</p>
+    {% if current_user.tipo == 'admin' %}
+        <h1>Página do Admin</h1>
+    {% elif current_user.tipo == 'medico' %}
+        <h1>Página do Médico</h1>
+    {% else %}
+        <h1>Página do Paciente</h1>
+    {% endif %}
+    
 {% endblock %}

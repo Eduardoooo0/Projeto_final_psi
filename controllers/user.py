@@ -22,7 +22,7 @@ def register():
         db.session.add(novo_user)
         db.session.commit()
 
-        if tipo == 'médico':
+        if tipo == 'medico':
             especialidade = request.form.get('especialidade')
             crm = request.form.get('crm')
             novo_medico = Medico(user_id=novo_user.id, especialidade=especialidade, crm=crm)

@@ -18,7 +18,7 @@
             <select id="tipo" name="tipo" class="form-control" required>
                 <option value="">Selecione</option>
                 <option value="admin">Admin</option>
-                <option value="médico">Médico</option>
+                <option value="medico">Médico</option>
                 <option value="paciente">Paciente</option>
             </select>
         </div>
@@ -36,7 +36,7 @@
             var extraFields = document.getElementById('extraFields');
             extraFields.innerHTML = '';
 
-            if (this.value === 'médico') {
+            if (this.value === 'medico') {
                 extraFields.innerHTML = `
                     <div class="form-group">
                         <label for="crm">CRM:</label>
