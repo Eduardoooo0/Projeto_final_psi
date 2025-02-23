@@ -6,6 +6,7 @@ from models.Doctor import Medico
 from models.Patients import Paciente
 from models import db
 from datetime import datetime
+import os
 
 user_bp = Blueprint('user', __name__)
 
@@ -16,18 +17,26 @@ def register():
         email = request.form.get('email')
         senha = request.form.get('senha')
         tipo = request.form.get('tipo')
-        
-        hash_senha = generate_password_hash(senha)
-        novo_user = User(nome=nome, email=email, senha=hash_senha, tipo=tipo)
-        db.session.add(novo_user)
-        db.session.commit()
 
         if tipo == 'medico':
+            senha = os.getenv('SENHA_PADRAO')
+            hash_senha = generate_password_hash(senha)
+            novo_user = User(nome=nome, email=email, senha=hash_senha, tipo=tipo)
+            db.session.add(novo_user)
+            db.session.commit()
+
+            User.invite_email_for_doctor(email=email)
+            user = User.query.filter_by(email=email).first()    
             especialidade = request.form.get('especialidade')
             crm = request.form.get('crm')
-            novo_medico = Medico(user_id=novo_user.id, especialidade=especialidade, crm=crm)
+            novo_medico = Medico(user_id=user.id, especialidade=especialidade, crm=crm)
             db.session.add(novo_medico)
         elif tipo == 'paciente':
+            hash_senha = generate_password_hash(senha)
+            novo_user = User(nome=nome, email=email, senha=hash_senha, tipo=tipo)
+            db.session.add(novo_user)
+            db.session.commit()
+
             idade = request.form.get('idade')
             data_nascimento = datetime.strptime(request.form.get('data_nascimento'), '%Y-%m-%d').date()
             telefone = request.form.get('telefone')
@@ -70,3 +79,15 @@ def logout():
 @login_required
 def dashboard():
     return render_template('home.html')
+
+@user_bp.route('/editar_senha', methods=['POST','GET'])
+def editar_senha():
+    if request.method == 'POST':
+        email = request.form['email']
+        senha = request.form['senha']
+        user = db.session.query(User).filter_by(email=email).first()
+        nova_senha = generate_password_hash(senha)
+        user.senha = nova_senha
+        return redirect(url_for('user.login'))
+
+    return render_template('editar_senha.html')

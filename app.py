@@ -7,8 +7,7 @@ from controllers.patients import patients_bp
 from flask_login import LoginManager
 import os
 from werkzeug.security import generate_password_hash
-from flask_mail import Mail, Message
-
+from flask_mail import Mail
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -42,11 +41,6 @@ app.register_blueprint(patients_bp, url_prefix='/patients')
 
 @app.route('/')
 def index():
-    msg = Message('EAE MINHA PATROA',
-                sender=os.getenv('EMAIL'),  # Seu email
-                recipients=['e.giscely@escolar.ifrn.edu.br'])  # Email do destinatário
-    msg.body = 'Solteira?'
-    mail.send(msg)
     user = User.query.filter_by(tipo='admin').first()
     if user is None:
         user = User(nome=os.getenv('NOME_ADMIN'), email=os.getenv('EMAIL_ADMIN'), senha=generate_password_hash(os.getenv('SENHA_ADMIN')), tipo=os.getenv('TIPO_ADMIN'))

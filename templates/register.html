@@ -13,10 +13,6 @@
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" class="form-control" required>
         </div>
-        <div class="form-group">
-            <label for="senha">Senha:</label>
-            <input type="password" id="senha" name="senha" class="form-control" required>
-        </div>
         {% if current_user.tipo == 'admin' %}
             <div class="form-group">
                 <label for="tipo">Tipo:</label>
@@ -47,6 +43,10 @@
             if (this.value === 'paciente') {
                 extraFields.innerHTML = `
                     <div class="form-group">
+                        <label for="senha">Senha:</label>
+                        <input type="password" id="senha" name="senha" class="form-control" required>
+                    </div>
+                    <div class="form-group">
                         <label for="idade">Idade:</label>
                         <input type="number" id="idade" name="idade" class="form-control" required>
                     </div>
@@ -70,6 +70,11 @@
             }
             else if (this.value === 'medico') {
                 extraFields.innerHTML = `
+
+                    <div class="form-group">
+                        <label for="especialidade">Especialidade:</label>
+                        <input type="text" id="especialidade" name="especialidade" class="form-control" required>
+                    </div>
                     <div class="form-group">
                         <label for="crm">CRM:</label>
                         <input type="text" id="crm" name="crm" class="form-control" required>
