@@ -31,9 +31,9 @@ def register():
             crm = request.form.get('crm')
             novo_medico = Medico(user_id=user.id, especialidade=especialidade, crm=crm)
             db.session.add(novo_medico)
-        elif tipo == 'paciente':
+        elif tipo is None:
             hash_senha = generate_password_hash(senha)
-            novo_user = User(nome=nome, email=email, senha=hash_senha, tipo=tipo)
+            novo_user = User(nome=nome, email=email, senha=hash_senha, tipo='paciente')
             db.session.add(novo_user)
             db.session.commit()
 
@@ -58,10 +58,9 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         senha = request.form.get('senha')
-        tipo = request.form.get('tipo')
 
         user = User.query.filter_by(email=email).first()
-        if user and check_password_hash(user.senha, senha) and tipo == user.tipo:
+        if user and check_password_hash(user.senha, senha):
             login_user(user)
             return redirect(url_for('user.dashboard'))
         flash('Credenciais inválidas')
@@ -88,6 +87,7 @@ def editar_senha():
         user = db.session.query(User).filter_by(email=email).first()
         nova_senha = generate_password_hash(senha)
         user.senha = nova_senha
+        db.session.commit()
         return redirect(url_for('user.login'))
 
     return render_template('editar_senha.html')

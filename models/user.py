@@ -15,7 +15,7 @@ class User(db.Model, UserMixin):
     nome: Mapped[str] 
     email: Mapped[str] 
     senha: Mapped[str] 
-    tipo: Mapped[str] = mapped_column(db.Enum('admin', 'medico', 'paciente'), nullable=False)
+    tipo: Mapped[str] = mapped_column(db.Enum('admin', 'medico', 'paciente'), default='paciente', nullable=False)
     data_criacao: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     def save(self):
@@ -32,5 +32,5 @@ class User(db.Model, UserMixin):
             msg = Message('Definir senha',
                     sender=os.getenv('EMAIL'),
                     recipients=[user.email])
-            msg.body = f'http://192.168.0.131:5000/user/editar_senha'
+            msg.body = f'Segue o link abaixo para definir sua senha de médico:\n http://192.168.0.131:5000/user/editar_senha'
             mail.send(msg)

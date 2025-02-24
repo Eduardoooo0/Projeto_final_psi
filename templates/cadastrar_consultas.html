@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <form action="" method="POST">
+        <div class="form-group">
+            <label for="titulo">Titulo da consulta:</label>
+            <input type="text" id="titulo" name="titulo" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="cartao">Cartão do SUS:</label>
+            <input type="text" id="cartao" name="cartao" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="status">Status:</label>
+            <select id="status" name="status" class="form-control" required>
+                <option value="" disabled>Selecione</option>
+                <option value="pendente">Pendente</option>
+                <option value="confirmada">Confirmada</option>
+                <option value="cancelada">Cancelada</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="motivo">Motivo da consulta:</label>
+            <input type="text" id="motivo" name="motivo" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+    </form>
+{% endblock %}
