@@ -1,0 +1,46 @@
+
+{% extends "base.html" %}
+{% block title %}Consultas{% endblock %}
+{% block content %}
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Consultas</h1>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data</th>
+                    <th>Paciente</th>
+                    <th>Motivo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for consultas in dados %}
+                    <tr>
+                        <td>{{ consultas['id'] }}</td>
+                        <td>{{ consultas['data'] }}</td>
+                        <td>{{ consultas['nome_paciente'] }}</td>
+                        <td>{{ consultas['motivo'] }}</td>
+                        {% if consultas['status'] == 'confirmada' %}
+                            <td>
+                                <a href="#" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta consulta?');">Excluir</a>
+                            </td>
+                        {% else %}
+                            <td>
+                                <a href="#" class="btn btn-warning btn-sm">Editar</a>
+                                <a href="#" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta consulta?');">Excluir</a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+<script>
+    function confirmarExclusao() {
+        return confirm("Tem certeza que deseja excluir esta consulta?");
+    }
+</script>
+
+{% endblock %}

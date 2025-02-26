@@ -7,6 +7,8 @@ class Consulta(db.Model):
     __tablename__ = 'consultas'
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    nome_paciente:Mapped[str]
+    cartao_sus: Mapped[str] 
     medico_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey('medicos.id'), nullable=False)
     paciente_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey('pacientes.id'), nullable=False)
     data: Mapped[datetime] = mapped_column(default=datetime.utcnow)

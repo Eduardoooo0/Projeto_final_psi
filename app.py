@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from models import db
 from models.user import User
+from models.Doctor import Medico
 from controllers.user import user_bp
 from controllers.doctor import doctor_bp
 from controllers.patients import patients_bp
@@ -43,8 +44,16 @@ app.register_blueprint(patients_bp, url_prefix='/patients')
 def index():
     user = User.query.filter_by(tipo='admin').first()
     if user is None:
-        user = User(nome=os.getenv('NOME_ADMIN'), email=os.getenv('EMAIL_ADMIN'), senha=generate_password_hash(os.getenv('SENHA_ADMIN')), tipo=os.getenv('TIPO_ADMIN'))
-        db.session.add(user)
+        user1 = User(nome='médico', email='medico@medico', senha=generate_password_hash('teo'), tipo='medico')
+        user2 = User(nome=os.getenv('NOME_ADMIN'), email=os.getenv('EMAIL_ADMIN'), senha=generate_password_hash(os.getenv('SENHA_ADMIN')), tipo=os.getenv('TIPO_ADMIN'))
+        users = [user1,user2]
+        db.session.add_all(users)
+        db.session.commit()
+
+
+        user_med = User.query.filter_by(nome='médico').first()
+        medico = Medico(user_id=user_med.id, especialidade='medico',crm='9966')
+        db.session.add(medico)
         db.session.commit()
     return render_template('index.html')
 
