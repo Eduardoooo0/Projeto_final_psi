@@ -15,7 +15,7 @@
         </div>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <p style="color: red;">{{messages[0]}}</p>
+                <p class="alert {% if messages[0] == 'Credenciais inválidas' %}alert-danger{% else %}alert-success{% endif %}">{{ messages[0] }}</p>
             {% endif %}
         {% endwith %}
         <div id="extraFields"></div>
