@@ -17,10 +17,13 @@
                 {% if current_user.is_authenticated %}
                     {% if current_user.tipo == 'admin' %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('user.dashboard') }}">Dashboard</a>    
+                            <a class="nav-link" href="{{ url_for('admin.dashboard') }}">Dashboard</a>    
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('user.register') }}">Cadastrar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin.add_usuario') }}">Adicionar Usuários</a>    
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('user.logout') }}">Logout</a>
@@ -46,10 +49,10 @@
                             <a class="nav-link" href="{{ url_for('user.dashboard') }}">Dashboard</a>    
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('user.solicitar_consulta') }}">Solicitar Consulta</a>    
+                            <a class="nav-link" href="{{ url_for('patients.solicitar_consulta') }}">Solicitar Consulta</a>    
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('user.mostrar_consultas') }}">Mostrar Consultas</a>    
+                            <a class="nav-link" href="{{ url_for('patients.listar_consultas') }}">Mostrar Consultas</a>    
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('user.logout') }}">Logout</a>

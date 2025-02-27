@@ -4,6 +4,7 @@ from models.Patients import Paciente
 from models.Consultation import Consulta 
 from models.Doctor import Medico
 from models.user import User 
+from datetime import datetime
 from flask_login import current_user, login_required 
 
 patients_bp = Blueprint('patients', __name__)
@@ -53,6 +54,8 @@ def delete_paciente(id):
     flash('Paciente deletado com sucesso!', 'success')
     return redirect(url_for('patients.manage_pacientes'))
 
+
+
 @patients_bp.route('/paciente/consultas', methods=['GET'])
 @login_required
 def listar_consultas():
@@ -61,23 +64,27 @@ def listar_consultas():
     return render_template('listar_consultas.html', consultas=consultas)
 
 
-#essa desgraça não funciona mesmo estando certo(não aparece medicos no select)
 @patients_bp.route('/paciente/solicitar_consulta', methods=['GET', 'POST'])
+@login_required
 def solicitar_consulta():
     if request.method == 'POST':
         cartao = request.form['cartao']
         motivo = request.form['motivo']
-        medico_id = request.form['medico_id']  # Supondo que você tenha uma lista de médicos
+        medico_id = request.form['medico_id']
+        data_consulta = request.form['data'] 
 
         paciente = Paciente.query.filter_by(user_id=current_user.id).first()
-        if paciente:
+        medico = Medico.query.get(medico_id)
+        if paciente and medico:
             nova_consulta = Consulta(
                 nome_paciente=paciente.nome,
+                nome_medico=medico.user.nome,  # pega o nome do medico pelo relacionamento
                 cartao_sus=cartao,
                 medico_id=medico_id,
                 paciente_id=paciente.id,
-                status='pendente',  # Status inicial
-                motivo=motivo
+                status='pendente',
+                motivo=motivo,
+                data=datetime.strptime(data_consulta, '%Y-%m-%d')  # Converte a data para o formato datetime
             )
             db.session.add(nova_consulta)
             db.session.commit()
@@ -85,5 +92,7 @@ def solicitar_consulta():
             return redirect(url_for('patients.listar_consultas'))
 
     # Renderiza o formulário para solicitar uma consulta
-    medicos = Medico.query.all()  # Liste todos os médicos disponíveis
+    medicos = Medico.query.all()
     return render_template('solicitar_consulta.html', medicos=medicos)
+
+

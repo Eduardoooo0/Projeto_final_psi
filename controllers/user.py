@@ -121,21 +121,3 @@ def editar_senha():
             flash('Usuário não encontrado.', 'danger')
 
     return render_template('editar_senha.html')
-
-
-@user_bp.route('/solicitar_consulta', methods=['GET', 'POST'])
-@login_required
-def solicitar_consulta():
-    if request.method == 'POST':
-        # Lógica para solicitar uma consulta
-        pass
-    return render_template('solicitar_consulta.html')  # A página para solicitar consultas
-
-
-
-
-@user_bp.route('/mostrar_consultas', methods=['GET'])
-@login_required
-def mostrar_consultas():
-    # Lógica para mostrar consultas
-    return render_template('listar_consultas.html')  # A página para mostrar as consultas

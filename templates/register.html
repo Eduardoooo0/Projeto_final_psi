@@ -55,16 +55,16 @@
             </div>
         {% endif %}
         
-        <div id="extraFields"></div>
+        <div id="camposAdicionais"></div>
         <button type="submit" class="btn btn-primary">Register</button>
     </form>
 
     <script>
         document.getElementById('tipo').addEventListener('change', function () {
-            var extraFields = document.getElementById('extraFields');
-            extraFields.innerHTML = '';
+            var camposAdicionais = document.getElementById('camposAdicionais');
+            camposAdicionais.innerHTML = '';
             if (this.value === 'paciente') {
-                extraFields.innerHTML = `
+                camposAdicionais.innerHTML = `
                     <div class="form-group">
                         <label for="senha">Senha:</label>
                         <input type="password" id="senha" name="senha" class="form-control" required>
@@ -92,7 +92,7 @@
                 `;
             }
             else if (this.value === 'medico') {
-                extraFields.innerHTML = `
+                camposAdicionais.innerHTML = `
 
                     <div class="form-group">
                         <label for="especialidade">Especialidade:</label>

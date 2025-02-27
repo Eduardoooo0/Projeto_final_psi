@@ -16,11 +16,14 @@
         <div class="form-group">
             <label for="medico_id">Médico:</label>
             <select id="medico_id" name="medico_id" class="form-control" required>
-                <!-- Essa desgraça não aparece os medicos -->
                 {% for medico in medicos %}
                     <option value="{{ medico.id }}">{{ medico.user.nome }}</option>
                 {% endfor %}
             </select>
+        </div>
+        <div class="form-group">
+            <label for="data">Data da Consulta:</label>
+            <input type="date" id="data" name="data" class="form-control" required>
         </div>
         <button type="submit" class="btn btn-primary">Solicitar</button>
     </form>

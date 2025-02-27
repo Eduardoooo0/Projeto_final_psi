@@ -15,7 +15,7 @@ class Medico(db.Model):
         self.especialidade = especialidade
         self.crm = crm
 
-    #relacionamento para pegar o nome do medico pela tabela user
+    # Relacionamento para pegar o nome do médico pela tabela user
     user = relationship("User", backref="medico")
 
     def as_dict(self):

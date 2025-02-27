@@ -5,6 +5,7 @@ from models.Doctor import Medico
 from controllers.user import user_bp
 from controllers.doctor import doctor_bp
 from controllers.patients import patients_bp
+from controllers.admin import admin_bp
 from flask_login import LoginManager
 import os
 from werkzeug.security import generate_password_hash
@@ -39,6 +40,7 @@ def load_user(user_id):
 app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(doctor_bp, url_prefix='/doctor')
 app.register_blueprint(patients_bp, url_prefix='/patients')
+app.register_blueprint(admin_bp, url_prefix='/admin')
 
 @app.route('/')
 def index():
