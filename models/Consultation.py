@@ -11,6 +11,6 @@ class Consulta(db.Model):
     cartao_sus: Mapped[str] 
     medico_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey('medicos.id'), nullable=False)
     paciente_id: Mapped[int] = mapped_column(db.Integer, db.ForeignKey('pacientes.id'), nullable=False)
-    data: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    data: Mapped[datetime]
     status: Mapped[str] = mapped_column(Enum('pendente', 'confirmada', 'cancelada'), default='pendente')
     motivo: Mapped[str] 

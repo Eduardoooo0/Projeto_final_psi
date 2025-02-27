@@ -27,14 +27,27 @@
                         <td>{{ consulta.nome_paciente }}</td>
                         <td>{{ consulta.motivo }}</td>
                         <td>{{ consulta.status }}</td>
-                        <td>
-                            <div style="display: flex; gap: 10px;">
-                                <form action="{{ url_for('doctor.delete_consulta', id=consulta.id) }}" method="POST" style="display:inline;">
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmarExclusao();">Excluir</button>
-                                </form>
-                                <a href="{{ url_for('doctor.edit_consulta', id=consulta.id) }}" class="btn btn-warning btn-sm">Editar</a>
-                            </div>
-                        </td>
+                        {% if consulta.status == 'pendente' %}
+                            <td>
+                                <div style="display: flex; gap: 10px;">
+                                    <form action="{{ url_for('doctor.delete_consulta', id=consulta.id) }}" method="POST" style="display:inline;">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmarExclusao();">Excluir</button>
+                                    </form>
+                                    <form action="{{url_for('doctor.confirm_consulta', id=consulta.id)}}" method="post">
+                                        <button style="background-color: green; border: none;" class="btn btn-warning btn-sm" onclick="return confirmarConclusão()">Concluir</button>
+                                    </form>
+                                    <a href="{{ url_for('doctor.edit_consulta', id=consulta.id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                </div>
+                            </td>
+                        {% elif consulta.status == 'cancelada'%}
+                            <td>
+                                <div style="display: flex; gap: 10px;">
+                                    <form action="{{ url_for('doctor.delete_consulta', id=consulta.id) }}" method="POST" style="display:inline;">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmarExclusao();">Excluir</button>
+                                    </form>
+                                </div>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
@@ -45,6 +58,9 @@
 <script>
     function confirmarExclusao() {
         return confirm("Tem certeza que deseja excluir esta consulta?");
+    }
+    function confirmarConclusao(){
+        return confirm("Tem certeza que deseja concluir esta consulta?");
     }
 </script>
 

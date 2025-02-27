@@ -42,9 +42,9 @@ def register():
             db.session.add(novo_medico)
             db.session.commit()  # Commit após adicionar médico
 
-        elif tipo == 'paciente':  # Corrigido para verificar se tipo é 'paciente'
+        else:  # Corrigido para verificar se tipo é 'paciente'
             hash_senha = generate_password_hash(senha)  # Aqui não deve ser None
-            novo_user = User(nome=nome, email=email, senha=hash_senha, tipo=tipo)
+            novo_user = User(nome=nome, email=email, senha=hash_senha, tipo='paciente')
             db.session.add(novo_user)
             db.session.commit()
 

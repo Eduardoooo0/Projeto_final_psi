@@ -69,6 +69,13 @@ def edit_consulta(id):
 
     return render_template('editar_consulta.html', consulta=consulta)
 
+@doctor_bp.route('/consultas/confirm/<int:id>', methods=['POST'])
+def confirm_consulta(id):
+    consulta = Consulta.query.get_or_404(id)
+    consulta.status = 'confirmada'
+    db.session.commit()
+    flash('Consulta concluida com sucesso!', 'success')
+    return redirect(url_for('doctor.consultas'))
 
 @doctor_bp.route('/consultas', methods=['GET'])
 @login_required
