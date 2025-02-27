@@ -38,7 +38,16 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('user.logout') }}">Logout</a>
                         </li>
-                    {% else %}
+                    {% elif current_user.tipo == 'paciente' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('user.dashboard') }}">Dashboard</a>    
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('user.solicitar_consulta') }}">Solicitar Consulta</a>    
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('user.mostrar_consultas') }}">Mostrar Consultas</a>    
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('user.logout') }}">Logout</a>
                         </li>

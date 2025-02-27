@@ -1,10 +1,13 @@
-
 {% extends "base.html" %}
 {% block title %}Consultas{% endblock %}
 {% block content %}
 
-    <div class="container mt-5">
-        <h1 class="mb-4">Consultas</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Consultas</h1>
+    
+    {% if dados|length == 0 %}
+        <div class="alert alert-info">Nenhuma consulta encontrada.</div>
+    {% else %}
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -12,30 +15,32 @@
                     <th>Data</th>
                     <th>Paciente</th>
                     <th>Motivo</th>
+                    <th>Status</th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
-                {% for consultas in dados %}
+                {% for consulta in dados %}
                     <tr>
-                        <td>{{ consultas['id'] }}</td>
-                        <td>{{ consultas['data'] }}</td>
-                        <td>{{ consultas['nome_paciente'] }}</td>
-                        <td>{{ consultas['motivo'] }}</td>
-                        {% if consultas['status'] == 'confirmada' %}
-                            <td>
-                                <a href="#" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta consulta?');">Excluir</a>
-                            </td>
-                        {% else %}
-                            <td>
-                                <a href="#" class="btn btn-warning btn-sm">Editar</a>
-                                <a href="#" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta consulta?');">Excluir</a>
-                            </td>
-                        {% endif %}
+                        <td>{{ consulta.id }}</td>
+                        <td>{{ consulta.data }}</td>
+                        <td>{{ consulta.nome_paciente }}</td>
+                        <td>{{ consulta.motivo }}</td>
+                        <td>{{ consulta.status }}</td>
+                        <td>
+                            <div style="display: flex; gap: 10px;">
+                                <form action="{{ url_for('doctor.delete_consulta', id=consulta.id) }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmarExclusao();">Excluir</button>
+                                </form>
+                                <a href="{{ url_for('doctor.edit_consulta', id=consulta.id) }}" class="btn btn-warning btn-sm">Editar</a>
+                            </div>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-    </div>
+    {% endif %}
+</div>
 
 <script>
     function confirmarExclusao() {

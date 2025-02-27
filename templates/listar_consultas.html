@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Minhas Consultas{% endblock %}
+
+{% block content %}
+    <h2>Minhas Consultas</h2>
+    {% if consultas %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data</th>
+                    <th>Motivo</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for consulta in consultas %}
+                    <tr>
+                        <td>{{ consulta.id }}</td>
+                        <td>{{ consulta.data }}</td>
+                        <td>{{ consulta.motivo }}</td>
+                        <td>{{ consulta.status }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhuma consulta encontrada.</p>
+    {% endif %}
+{% endblock %}

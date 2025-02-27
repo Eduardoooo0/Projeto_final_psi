@@ -18,36 +18,56 @@ def register():
         senha = request.form.get('senha')
         tipo = request.form.get('tipo')
 
+        # Verifica se a senha foi informada
+        if not senha:
+            flash('A senha é obrigatória.', 'danger')
+            return redirect(url_for('user.register'))
+
         if tipo == 'medico':
-            senha = os.getenv('SENHA_PADRAO')
+            senha = os.getenv('SENHA_PADRAO')  # Usa a senha padrão se for médico
+            if not senha:
+                flash('A senha padrão não está definida.', 'danger')
+                return redirect(url_for('user.register'))
+
             hash_senha = generate_password_hash(senha)
             novo_user = User(nome=nome, email=email, senha=hash_senha, tipo=tipo)
             db.session.add(novo_user)
             db.session.commit()
 
             User.invite_email_for_doctor(email=email)
-            user = User.query.filter_by(email=email).first()    
+            user = User.query.filter_by(email=email).first()
             especialidade = request.form.get('especialidade')
             crm = request.form.get('crm')
             novo_medico = Medico(user_id=user.id, especialidade=especialidade, crm=crm)
             db.session.add(novo_medico)
-        elif tipo is None:
-            hash_senha = generate_password_hash(senha)
-            novo_user = User(nome=nome, email=email, senha=hash_senha, tipo='paciente')
+            db.session.commit()  # Commit após adicionar médico
+
+        elif tipo == 'paciente':  # Corrigido para verificar se tipo é 'paciente'
+            hash_senha = generate_password_hash(senha)  # Aqui não deve ser None
+            novo_user = User(nome=nome, email=email, senha=hash_senha, tipo=tipo)
             db.session.add(novo_user)
             db.session.commit()
 
             idade = request.form.get('idade')
-            data_nascimento = datetime.strptime(request.form.get('data_nascimento'), '%Y-%m-%d').date()
+            data_nascimento = request.form.get('data_nascimento')
             telefone = request.form.get('telefone')
             endereco = request.form.get('endereco')
             cartao_sus = request.form.get('cartao_sus')
-            novo_paciente = Paciente(user_id=novo_user.id, nome=nome, idade=idade, data_nascimento=data_nascimento,
-                                    telefone=telefone, endereco=endereco, cartao_sus=cartao_sus)
+
+            # Adiciona tratamento para data_nascimento
+            try:
+                data_nascimento = datetime.strptime(data_nascimento, '%Y-%m-%d').date()
+            except ValueError:
+                flash('Data de nascimento não está no formato correto.', 'danger')
+                return redirect(url_for('user.register'))
+
+            novo_paciente = Paciente(user_id=novo_user.id, nome=nome, idade=idade,
+                                    data_nascimento=data_nascimento, telefone=telefone,
+                                    endereco=endereco, cartao_sus=cartao_sus)
             db.session.add(novo_paciente)
 
         db.session.commit()
-        flash('Usuário registrado com sucesso!')
+        flash('Usuário registrado com sucesso!', 'success')
         return redirect(url_for('user.login'))
 
     return render_template('register.html')
@@ -63,7 +83,7 @@ def login():
         if user and check_password_hash(user.senha, senha):
             login_user(user)
             return redirect(url_for('user.dashboard'))
-        flash('Credenciais inválidas')
+        flash('Credenciais inválidas', 'danger')
         return redirect(url_for('user.login'))
     return render_template('login.html')
 
@@ -71,7 +91,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('Logout realizado com sucesso!')
+    flash('Logout realizado com sucesso!', 'success')
     return redirect(url_for('user.login'))
 
 @user_bp.route('/dashboard')
@@ -79,15 +99,40 @@ def logout():
 def dashboard():
     return render_template('home.html')
 
-@user_bp.route('/editar_senha', methods=['POST','GET'])
+@user_bp.route('/editar_senha', methods=['POST', 'GET'])
+@login_required
 def editar_senha():
     if request.method == 'POST':
-        email = request.form['email']
+        email = current_user.email  # Usa o email do usuário atual
         senha = request.form['senha']
+
+        if not senha:
+            flash('A nova senha é obrigatória.', 'danger')
+            return redirect(url_for('user.editar_senha'))
+
         user = db.session.query(User).filter_by(email=email).first()
-        nova_senha = generate_password_hash(senha)
-        user.senha = nova_senha
-        db.session.commit()
-        return redirect(url_for('user.login'))
+        if user:  # Verifica se o usuário existe
+            nova_senha = generate_password_hash(senha)
+            user.senha = nova_senha
+            db.session.commit()
+            flash('Senha atualizada com sucesso!', 'success')
+            return redirect(url_for('user.login'))
+        else:
+            flash('Usuário não encontrado.', 'danger')
 
     return render_template('editar_senha.html')
+
+
+@user_bp.route('/solicitar_consulta', methods=['GET', 'POST'])
+@login_required
+def solicitar_consulta():
+    if request.method == 'POST':
+        # Lógica para solicitar uma consulta
+        pass
+    return render_template('solicitar_consulta.html')  # A página para solicitar consultas
+
+@user_bp.route('/mostrar_consultas', methods=['GET'])
+@login_required
+def mostrar_consultas():
+    # Lógica para mostrar consultas
+    return render_template('listar_consultas.html')  # A página para mostrar as consultas

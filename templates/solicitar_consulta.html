@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Solicitar Consulta{% endblock %}
+
+{% block content %}
+    <h2>Solicitar Consulta</h2>
+    <form action="" method="POST">
+        <div class="form-group">
+            <label for="cartao">Cartão SUS:</label>
+            <input type="text" id="cartao" name="cartao" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="motivo">Motivo:</label>
+            <input type="text" id="motivo" name="motivo" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="medico_id">Médico:</label>
+            <select id="medico_id" name="medico_id" class="form-control" required>
+                {% for medico in medicos %}
+                    <option value="{{ medico.id }}">{{ medico.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Solicitar</button>
+    </form>
+{% endblock %}
