@@ -20,15 +20,18 @@ def cadastrar_consultas():
         motivo = request.form['motivo']
         paciente = db.session.query(Paciente).filter_by(cartao_sus=cartao).first()
         medico = db.session.query(Medico).filter_by(user_id=current_user.id).first()
-
+        data = request.form.get('data')
+        data = datetime.strptime(data, '%Y-%m-%d').date()
         if paciente and medico:
             nova_consulta = Consulta(
                 nome_paciente=paciente.nome,
+                nome_medico=current_user.nome,
                 cartao_sus=cartao,
                 medico_id=medico.id,
                 paciente_id=paciente.id,
                 status=status,
-                motivo=motivo
+                motivo=motivo,
+                data=data
             )
             db.session.add(nova_consulta)
             db.session.commit()
@@ -54,7 +57,6 @@ def delete_consulta(id):
 @login_required
 def edit_consulta(id):
     consulta = Consulta.query.get_or_404(id)
-
     if request.method == 'POST':
         # Converte a string de data para um objeto datetime
         data_string = request.form.get('data')
@@ -77,11 +79,27 @@ def confirm_consulta(id):
     flash('Consulta concluida com sucesso!', 'success')
     return redirect(url_for('doctor.consultas'))
 
+@doctor_bp.route('/consultas/cancelar/<int:id>', methods=['POST'])
+def cancelar_consulta(id):
+    consulta = Consulta.query.get_or_404(id)
+    consulta.status = 'cancelada'
+    db.session.commit()
+    flash('Consulta cancelada com sucesso!', 'success')
+    return redirect(url_for('doctor.consultas'))
+
 @doctor_bp.route('/consultas', methods=['GET'])
 @login_required
 def consultas():
-    dados = db.session.query(Consulta).all()
+    dados = db.session.query(Consulta).filter_by(medico_id=current_user.id).all()
     return render_template('consultas.html', dados=dados)
+
+
+@doctor_bp.route('/agenda', methods=['POST','GET'])
+def agenda():
+    if request.method == 'POST':
+        pass
+    return render_template('agenda.html')
+
 
 
 @doctor_bp.route('/medicos/edit/<int:id>', methods=['GET', 'POST'])

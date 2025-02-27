@@ -45,14 +45,18 @@ def index():
     user = User.query.filter_by(tipo='admin').first()
     if user is None:
         user1 = User(nome='médico', email='medico@medico', senha=generate_password_hash('teo'), tipo='medico')
+        user3 = User(nome='xixico', email='xixico@med', senha=generate_password_hash('teo'), tipo='medico')
         user2 = User(nome=os.getenv('NOME_ADMIN'), email=os.getenv('EMAIL_ADMIN'), senha=generate_password_hash(os.getenv('SENHA_ADMIN')), tipo=os.getenv('TIPO_ADMIN'))
-        users = [user1,user2]
+        users = [user1,user2,user3]
         db.session.add_all(users)
         db.session.commit()
 
 
         user_med = User.query.filter_by(nome='médico').first()
+        user_med2 = User.query.filter_by(nome='xixico').first()
         medico = Medico(user_id=user_med.id, especialidade='medico',crm='9966')
-        db.session.add(medico)
+        medico2 = Medico(user_id=user_med2.id, especialidade='medico',crm='6699')
+        medicos = [medico,medico2]
+        db.session.add_all(medicos)
         db.session.commit()
     return render_template('index.html')
