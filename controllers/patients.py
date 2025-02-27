@@ -3,6 +3,7 @@ from models import db
 from models.Patients import Paciente
 from models.Consultation import Consulta 
 from models.Doctor import Medico
+from models.user import User 
 from flask_login import current_user, login_required 
 
 patients_bp = Blueprint('patients', __name__)
@@ -59,6 +60,8 @@ def listar_consultas():
     consultas = Consulta.query.filter_by(paciente_id=paciente.id).all() if paciente else []
     return render_template('listar_consultas.html', consultas=consultas)
 
+
+#essa desgraça não funciona mesmo estando certo(não aparece medicos no select)
 @patients_bp.route('/paciente/solicitar_consulta', methods=['GET', 'POST'])
 def solicitar_consulta():
     if request.method == 'POST':

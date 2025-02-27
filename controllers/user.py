@@ -131,6 +131,9 @@ def solicitar_consulta():
         pass
     return render_template('solicitar_consulta.html')  # A página para solicitar consultas
 
+
+
+
 @user_bp.route('/mostrar_consultas', methods=['GET'])
 @login_required
 def mostrar_consultas():

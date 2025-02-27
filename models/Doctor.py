@@ -1,5 +1,6 @@
 from models import db
-from sqlalchemy.orm import Mapped, mapped_column
+from models.user import User
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 class Medico(db.Model):
     __tablename__ = 'medicos'
@@ -14,10 +15,14 @@ class Medico(db.Model):
         self.especialidade = especialidade
         self.crm = crm
 
+    #relacionamento para pegar o nome do medico pela tabela user
+    user = relationship("User", backref="medico")
+
     def as_dict(self):
         return {
             'id': self.id,
             'user_id': self.user_id,
+            'nome': self.user.nome,
             'especialidade': self.especialidade,
             'crm': self.crm
         }

@@ -16,8 +16,9 @@
         <div class="form-group">
             <label for="medico_id">Médico:</label>
             <select id="medico_id" name="medico_id" class="form-control" required>
+                <!-- Essa desgraça não aparece os medicos -->
                 {% for medico in medicos %}
-                    <option value="{{ medico.id }}">{{ medico.nome }}</option>
+                    <option value="{{ medico.id }}">{{ medico.user.nome }}</option>
                 {% endfor %}
             </select>
         </div>
