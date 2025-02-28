@@ -4,7 +4,7 @@
 
 {% block content %}
     <h2>Login</h2>
-    <form action="" method="POST">
+    <form action="{{ url_for('user.login') }}" method="POST">
         <div class="form-group">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" class="form-control" required>
@@ -13,12 +13,15 @@
             <label for="senha">Senha:</label>
             <input type="password" id="senha" name="senha" class="form-control" required>
         </div>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <p class="alert {% if messages[0] == 'Credenciais inválidas' %}alert-danger{% else %}alert-success{% endif %}">{{ messages[0] }}</p>
+
+        {% with mensagens = get_flashed_messages(with_categories=True) %}
+            {% if mensagens %}
+                {% for categoria, mensagem in mensagens %}
+                    <div class="alert alert-{{ categoria }}">{{ mensagem }}</div>
+                {% endfor %}
             {% endif %}
         {% endwith %}
-        <div id="camposAdicionais"></div>
+
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
 

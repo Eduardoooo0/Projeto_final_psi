@@ -48,10 +48,10 @@
                                     <form action="{{ url_for('doctor.delete_consulta', id=consulta.id) }}" method="POST" style="display:inline;">
                                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmarExclusao();">Excluir</button>
                                     </form>
-                                    <form action="{{url_for('doctor.confirm_consulta', id=consulta.id)}}" method="post">
+                                    <form action="{{ url_for('doctor.confirm_consulta', id=consulta.id) }}" method="post">
                                         <button style="background-color: green; border: none; color: white;" class="btn btn-warning btn-sm" onclick="return confirmarConclusão()">Concluir</button>
                                     </form>
-                                    <form action="{{url_for('doctor.cancelar_consulta', id=consulta.id)}}" method="post">
+                                    <form action="{{ url_for('doctor.cancelar_consulta', id=consulta.id) }}" method="post">
                                         <button style="background-color: blue; border: none; color: white;" class="btn btn-warning btn-sm" onclick="return confirmarCancelar()">Cancelar</button>
                                     </form>
                                     <a href="{{ url_for('doctor.edit_consulta', id=consulta.id) }}" style="color: white;" class="btn btn-warning btn-sm">Editar</a>
@@ -74,15 +74,17 @@
 </div>
 
 <script>
-    function confirmarExclusao() {
-        return confirm("Tem certeza que deseja excluir esta consulta?");
-    }
-    function confirmarConclusao(){
-        return confirm("Tem certeza que deseja concluir esta consulta?");
-    }
-    function confirmarCancelar(){
-        return confirm("Tem certeza que deseja cancelar esta consulta?");
-    }
+function confirmarExclusao() {
+    return confirm('Tem certeza que deseja excluir esta consulta?');
+}
+
+function confirmarConclusão() {
+    return confirm('Tem certeza que deseja concluir esta consulta?');
+}
+
+function confirmarCancelar() {
+    return confirm('Tem certeza que deseja cancelar esta consulta?');
+}
 </script>
 
 {% endblock %}

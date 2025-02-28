@@ -1,18 +1,23 @@
 {% extends "base.html" %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Editar Senha{% endblock %}
 
 {% block content %}
-    <h2>Register</h2>
-    <form action="" method="POST">
+    <h2>Editar Senha</h2>
+    <form action="{{ url_for('user.editar_senha') }}" method="POST">
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" class="form-control" required>
+            <label for="nova_senha">Nova senha:</label>
+            <input type="password" id="nova_senha" name="nova_senha" class="form-control" placeholder="Digite sua nova senha" required>
         </div>
-        <div class="form-group">
-            <label for="senha">Nova senha:</label>
-            <input type="password" id="senha" name="senha" class="form-control" placeholder="Digite sua nova senha" required>
-        </div>
+        
+        {% with mensagens = get_flashed_messages(with_categories=True) %}
+            {% if mensagens %}
+                {% for categoria, mensagem in mensagens %}
+                    <div class="alert alert-{{ categoria }}">{{ mensagem }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
         <button type="submit" class="btn btn-primary">Confirmar</button>
     </form>
 {% endblock %}

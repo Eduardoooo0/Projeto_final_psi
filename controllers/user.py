@@ -18,7 +18,7 @@ def register():
         tipo = request.form.get('tipo')
 
         if tipo == 'medico':
-            senha = os.getenv('SENHA_PADRAO')  
+            senha = os.getenv('SENHA_PADRAO')
             if not senha:
                 flash('A senha padrão não está definida.', 'danger')
                 return redirect(url_for('user.register'))
@@ -34,11 +34,11 @@ def register():
             crm = request.form.get('crm')
             novo_medico = Medico(user_id=user.id, especialidade=especialidade, crm=crm)
             db.session.add(novo_medico)
-            db.session.commit()  
+            db.session.commit()
 
         else:
             senha = request.form.get('senha')
-            hash_senha = generate_password_hash(senha) 
+            hash_senha = generate_password_hash(senha)
             novo_user = User(nome=nome, email=email, senha=hash_senha, tipo='paciente')
             db.session.add(novo_user)
             db.session.commit()
@@ -56,8 +56,8 @@ def register():
                 return redirect(url_for('user.register'))
 
             novo_paciente = Paciente(user_id=novo_user.id, nome=nome, idade=idade,
-                                    data_nascimento=data_nascimento, telefone=telefone,
-                                    endereco=endereco, cartao_sus=cartao_sus)
+                                     data_nascimento=data_nascimento, telefone=telefone,
+                                     endereco=endereco, cartao_sus=cartao_sus)
             db.session.add(novo_paciente)
 
         db.session.commit()
@@ -83,6 +83,7 @@ def login():
         return redirect(url_for('user.login'))
     return render_template('login.html')
 
+
 @user_bp.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
@@ -90,30 +91,27 @@ def logout():
     flash('Logout realizado com sucesso!', 'success')
     return redirect(url_for('index'))
 
+
 @user_bp.route('/dashboard')
 @login_required
 def dashboard():
     return render_template('home.html')
 
+
 @user_bp.route('/editar_senha', methods=['POST', 'GET'])
 @login_required
 def editar_senha():
     if request.method == 'POST':
-        email = current_user.email
-        senha = request.form['senha']
+        nova_senha = request.form.get('nova_senha')
 
-        if not senha:
+        if not nova_senha:
             flash('A nova senha é obrigatória.', 'danger')
             return redirect(url_for('user.editar_senha'))
 
-        user = db.session.query(User).filter_by(email=email).first()
-        if user: 
-            nova_senha = generate_password_hash(senha)
-            user.senha = nova_senha
-            db.session.commit()
-            flash('Senha atualizada com sucesso!', 'success')
-            return redirect(url_for('user.login'))
-        else:
-            flash('Usuário não encontrado.', 'danger')
+        user = current_user
+        user.senha = generate_password_hash(nova_senha)
+        db.session.commit()
+        flash('Senha atualizada com sucesso!', 'success')
+        return redirect(url_for('user.dashboard'))
 
     return render_template('editar_senha.html')
