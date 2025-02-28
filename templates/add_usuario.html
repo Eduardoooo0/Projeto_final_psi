@@ -21,8 +21,9 @@
             <div class="form-group">
                 <label for="tipo">Tipo:</label>
                 <select id="tipo" name="tipo" class="form-control" required>
-                    <option value="medico">Médico</option>
+                    <option value="">Selecione</option>
                     <option value="paciente">Paciente</option>
+                    <option value="medico">Médico</option>
                 </select>
             </div>
             <div id="camposAdicionais"></div>
@@ -38,7 +39,7 @@
                 camposAdicionais.innerHTML = `
                     <div class="form-group">
                         <label for="idade">Idade:</label>
-                        <input type="number" id="idade" name="idade" class="form-control" required>
+                        <input type="number" id="idade" name="idade" class="form-control" required min="0">
                     </div>
                     <div class="form-group">
                         <label for="data_nascimento">Data de Nascimento:</label>
@@ -47,7 +48,6 @@
                     <div class="form-group">
                         <label for="telefone">Telefone:</label>
                         <input type="text" id="telefone" name="telefone" class="form-control" required>
-                    </div>
                     <div class="form-group">
                         <label for="endereco">Endereço:</label>
                         <input type="text" id="endereco" name="endereco" class="form-control" required>
@@ -57,8 +57,7 @@
                         <input type="text" id="cartao_sus" name="cartao_sus" class="form-control" required>
                     </div>
                 `;
-            }
-            else if (this.value === 'medico') {
+            } else if (this.value === 'medico') {
                 camposAdicionais.innerHTML = `
                     <div class="form-group">
                         <label for="especialidade">Especialidade:</label>
@@ -72,5 +71,4 @@
             }
         });
     </script>
-
 {% endblock %}

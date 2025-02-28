@@ -1,5 +1,5 @@
 from models import db
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import date
 
 class Paciente(db.Model):
@@ -34,3 +34,5 @@ class Paciente(db.Model):
             'endereco': self.endereco,
             'cartao_sus': self.cartao_sus
         }
+    
+    user = relationship("User", backref="pacientes")

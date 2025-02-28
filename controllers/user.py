@@ -18,13 +18,13 @@ def register():
         senha = request.form.get('senha')
         tipo = request.form.get('tipo')
 
-        # Verifica se a senha foi informada
+
         if not senha:
             flash('A senha é obrigatória.', 'danger')
             return redirect(url_for('user.register'))
 
         if tipo == 'medico':
-            senha = os.getenv('SENHA_PADRAO')  # Usa a senha padrão se for médico
+            senha = os.getenv('SENHA_PADRAO')  
             if not senha:
                 flash('A senha padrão não está definida.', 'danger')
                 return redirect(url_for('user.register'))
@@ -40,10 +40,10 @@ def register():
             crm = request.form.get('crm')
             novo_medico = Medico(user_id=user.id, especialidade=especialidade, crm=crm)
             db.session.add(novo_medico)
-            db.session.commit()  # Commit após adicionar médico
+            db.session.commit()  
 
         else:  # Corrigido para verificar se tipo é 'paciente'
-            hash_senha = generate_password_hash(senha)  # Aqui não deve ser None
+            hash_senha = generate_password_hash(senha) 
             novo_user = User(nome=nome, email=email, senha=hash_senha, tipo='paciente')
             db.session.add(novo_user)
             db.session.commit()
@@ -54,7 +54,7 @@ def register():
             endereco = request.form.get('endereco')
             cartao_sus = request.form.get('cartao_sus')
 
-            # Adiciona tratamento para data_nascimento
+          
             try:
                 data_nascimento = datetime.strptime(data_nascimento, '%Y-%m-%d').date()
             except ValueError:
@@ -103,7 +103,7 @@ def dashboard():
 @login_required
 def editar_senha():
     if request.method == 'POST':
-        email = current_user.email  # Usa o email do usuário atual
+        email = current_user.email 
         senha = request.form['senha']
 
         if not senha:
@@ -111,7 +111,7 @@ def editar_senha():
             return redirect(url_for('user.editar_senha'))
 
         user = db.session.query(User).filter_by(email=email).first()
-        if user:  # Verifica se o usuário existe
+        if user: 
             nova_senha = generate_password_hash(senha)
             user.senha = nova_senha
             db.session.commit()
