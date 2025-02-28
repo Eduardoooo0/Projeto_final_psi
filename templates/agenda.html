@@ -1,21 +1,78 @@
 {% extends 'base.html' %}
 
-    
+
     {% block content %}
         <h1>Agenda do Médico</h1>
-        <p>Here is the agenda for the conference:</p>
-        <ul>
-            <li>9:00am - Consulta 1</li>
-            <li>10:00am - Consulta 2</li>
-            <li>11:00am - Consulta 3</li>
-            <li>11:15am - Consulta 4</li>
-            <li>12:15pm - Consulta 5</li>
-            <li>1:30pm - Consulta 6</li>
-            <li>2:30pm - Consulta 7</li>
-            <li>2:45pm - Consulta 8</li>
-            <li>3:45pm - Consulta 9</li>
-            <li>4:00pm - Consulta 10</li>
-            <li>5:00pm - Consulta 11</li>
-        </ul>
+        {% if solicitacoes|length == 0 %}
+            <div class="alert alert-info">Nenhuma solicitação encontrada.</div>
+        {% else %}
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome do Paciente</th>
+                        <th>Motivo</th>
+                        <th>Data</th>
+                        <th>Hora</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slt in solicitacoes %}
+                        <tr>
+                            <td>{{ slt.id }}</td>
+                            <td>{{ slt.paciente_nome }}</td>
+                            <td>{{ slt.motivo }}</td>
+                            <td>{{ slt.data }}</td>
+                            <td>{{ slt.hora }}</td>
+                            <td>{{ slt.status }}</td>
+                            <td style="display: flex; justify-content: space-around;">
+                                {% if slt.status == 'pendente' %}
+                                        <div style="display: flex; gap: 10px;">
+                                            <form action="{{ url_for('doctor.excluir_solicitacao', id=slt.id) }}" method="POST" style="display:inline;">
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmarExclusao();">Excluir</button>
+                                            </form>
+                                        </div>
+                                        <form action="{{url_for('doctor.agendar_solicitacao', id=slt.id)}}" method="post">
+                                                <button style="background-color: green; border: none; color: white;" class="btn btn-warning btn-sm" onclick="return confirmarAgendar()">Agendar</button>
+                                        </form>
+                                        <form action="{{url_for('doctor.recusar_solicitacao', id=slt.id)}}" method="post">
+                                                <button style="background-color: blue; border: none; color: white;" class="btn btn-warning btn-sm" onclick="return confirmarRecusar()">Recusar</button>
+                                        </form>
+                                {% elif slt.status == 'agendada' %}
+                                        <div style="display: flex; gap: 10px;">
+                                            <form action="{{ url_for('doctor.desagendar_solicitacao', id=slt.id) }}" method="POST" style="display:inline;">
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirmarDesangedar();">Cancelar</button>
+                                            </form>
+                                        </div>
+                                {% else %}
+                                    <div style="display: flex; gap: 10px;">
+                                        <form action="{{url_for('doctor.excluir_solicitacao', id=slt.id)}}" method="post">
+                                            <button style="background-color: red; border: none; color: white;" class="btn btn-warning btn-sm" onclick="return confirmarExclusao()">Excluir</button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        {% endif %}
+        <script>
+            function confirmarExclusao() {
+                return confirm("Tem certeza que deseja excluir esta Solicitação?");
+            }
+            function confirmarRecusar(){
+                return confirm("Tem certeza que deseja Recusar esta Solicitação?");
+            }
+            function confirmarAgendar(){
+                return confirm("Tem certeza que deseja agendar esta consulta?");
+            }
+            function confirmarDesagendar(){
+                return confirm("Tem certeza que deseja desagendar esta consulta?");
+            }
+        </script>
     {% endblock %}
 

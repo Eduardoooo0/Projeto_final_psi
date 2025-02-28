@@ -1,6 +1,7 @@
 from flask import Blueprint, request, redirect, url_for, render_template, flash
 from models import db
 from models.Patients import Paciente
+from models.Solicitations import Solicitacoes
 from models.Consultation import Consulta 
 from models.Doctor import Medico
 from models.user import User 
@@ -64,29 +65,28 @@ def listar_consultas():
     return render_template('listar_consultas.html', consultas=consultas)
 
 
-@patients_bp.route('/paciente/solicitar_consulta', methods=['GET', 'POST'])
+@patients_bp.route('/solicitar_consulta', methods=['GET', 'POST'])
 @login_required
 def solicitar_consulta():
     if request.method == 'POST':
-        cartao = request.form['cartao']
         motivo = request.form['motivo']
         medico_id = request.form['medico_id']
-        data_consulta = request.form['data'] 
-
+        data = request.form['data']
+        hora= request.form['hora']
         paciente = Paciente.query.filter_by(user_id=current_user.id).first()
         medico = Medico.query.get(medico_id)
         if paciente and medico:
-            nova_consulta = Consulta(
-                nome_paciente=paciente.nome,
-                nome_medico=medico.user.nome,  # pega o nome do medico pelo relacionamento
-                cartao_sus=cartao,
+            solicitacao = Solicitacoes(
+                paciente_nome=paciente.nome,
+                cartao_sus=paciente.cartao_sus,
                 medico_id=medico_id,
                 paciente_id=paciente.id,
                 status='pendente',
                 motivo=motivo,
-                data=datetime.strptime(data_consulta, '%Y-%m-%d')  # Converte a data para o formato datetime
+                data=datetime.strptime(data, '%Y-%m-%d').date(),
+                hora=hora
             )
-            db.session.add(nova_consulta)
+            db.session.add(solicitacao)
             db.session.commit()
             flash('Consulta solicitada com sucesso!', 'success')
             return redirect(url_for('patients.listar_consultas'))

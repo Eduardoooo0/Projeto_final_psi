@@ -15,13 +15,7 @@ def register():
     if request.method == 'POST':
         nome = request.form.get('nome')
         email = request.form.get('email')
-        senha = request.form.get('senha')
         tipo = request.form.get('tipo')
-
-
-        if not senha:
-            flash('A senha é obrigatória.', 'danger')
-            return redirect(url_for('user.register'))
 
         if tipo == 'medico':
             senha = os.getenv('SENHA_PADRAO')  
@@ -42,7 +36,8 @@ def register():
             db.session.add(novo_medico)
             db.session.commit()  
 
-        else:  # Corrigido para verificar se tipo é 'paciente'
+        else:
+            senha = request.form.get('senha')
             hash_senha = generate_password_hash(senha) 
             novo_user = User(nome=nome, email=email, senha=hash_senha, tipo='paciente')
             db.session.add(novo_user)
@@ -54,7 +49,6 @@ def register():
             endereco = request.form.get('endereco')
             cartao_sus = request.form.get('cartao_sus')
 
-          
             try:
                 data_nascimento = datetime.strptime(data_nascimento, '%Y-%m-%d').date()
             except ValueError:
@@ -82,6 +76,8 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user and check_password_hash(user.senha, senha):
             login_user(user)
+            if current_user.tipo == 'admin':
+                return redirect(url_for('admin.dashboard'))
             return redirect(url_for('user.dashboard'))
         flash('Credenciais inválidas', 'danger')
         return redirect(url_for('user.login'))
@@ -92,7 +88,7 @@ def login():
 def logout():
     logout_user()
     flash('Logout realizado com sucesso!', 'success')
-    return redirect(url_for('user.login'))
+    return redirect(url_for('index'))
 
 @user_bp.route('/dashboard')
 @login_required
@@ -103,7 +99,7 @@ def dashboard():
 @login_required
 def editar_senha():
     if request.method == 'POST':
-        email = current_user.email 
+        email = current_user.email
         senha = request.form['senha']
 
         if not senha:
