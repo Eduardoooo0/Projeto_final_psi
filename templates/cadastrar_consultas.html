@@ -3,7 +3,8 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <form action="" method="POST">
+    <h2>Cadastrar Consultas</h2>
+    <form action="{{ url_for('doctor.cadastrar_consultas') }}" method="POST">
         <div class="form-group">
             <label for="cartao">Cartão do SUS:</label>
             <input type="text" id="cartao" name="cartao" class="form-control" required>
@@ -25,6 +26,13 @@
             <label for="data">Data:</label>
             <input type="date" id="data" name="data" class="form-control" required>
         </div>
+        {% with mensagens = get_flashed_messages(with_categories=True) %}
+            {% if mensagens %}
+                {% for categoria, mensagem in mensagens %}
+                    <div class="alert alert-{{ categoria }}">{{ mensagem }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <button type="submit" class="btn btn-primary">Cadastrar</button>
     </form>
 {% endblock %}

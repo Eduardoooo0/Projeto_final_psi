@@ -32,5 +32,5 @@ class User(db.Model, UserMixin):
             msg = Message('Definir senha',
                     sender=os.getenv('EMAIL'),
                     recipients=[user.email])
-            msg.body = f'Segue o link abaixo para definir sua senha de médico:\n http://192.168.0.131:5000/user/editar_senha'
+            msg.body = f'Segue o link abaixo para definir sua senha de médico:\n <seu_IP>/user/editar_senha'
             mail.send(msg)

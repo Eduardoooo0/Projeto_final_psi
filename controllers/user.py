@@ -17,6 +17,11 @@ def register():
         email = request.form.get('email')
         tipo = request.form.get('tipo')
 
+        
+        if User.query.filter_by(email=email).first():
+            flash('O e-mail já está em uso.', 'danger')
+            return redirect(url_for('user.register'))
+
         if tipo == 'medico':
             senha = os.getenv('SENHA_PADRAO')
             if not senha:
@@ -40,14 +45,17 @@ def register():
             senha = request.form.get('senha')
             hash_senha = generate_password_hash(senha)
             novo_user = User(nome=nome, email=email, senha=hash_senha, tipo='paciente')
-            db.session.add(novo_user)
-            db.session.commit()
-
+            
             idade = request.form.get('idade')
             data_nascimento = request.form.get('data_nascimento')
             telefone = request.form.get('telefone')
             endereco = request.form.get('endereco')
             cartao_sus = request.form.get('cartao_sus')
+
+        
+            if Paciente.query.filter_by(cartao_sus=cartao_sus).first():
+                flash('O cartão SUS já está em uso.', 'danger')
+                return redirect(url_for('user.register'))
 
             try:
                 data_nascimento = datetime.strptime(data_nascimento, '%Y-%m-%d').date()
@@ -55,17 +63,18 @@ def register():
                 flash('Data de nascimento não está no formato correto.', 'danger')
                 return redirect(url_for('user.register'))
 
-            novo_paciente = Paciente(user_id=novo_user.id, nome=nome, idade=idade,
-                                     data_nascimento=data_nascimento, telefone=telefone,
-                                     endereco=endereco, cartao_sus=cartao_sus)
-            db.session.add(novo_paciente)
+            db.session.add(novo_user)
+            db.session.commit()
 
-        db.session.commit()
+
+            novo_paciente = Paciente(user_id=novo_user.id, nome=nome, idade=idade,data_nascimento=data_nascimento, telefone=telefone,endereco=endereco, cartao_sus=cartao_sus)
+            db.session.add(novo_paciente)
+            db.session.commit()
+
         flash('Usuário registrado com sucesso!', 'success')
         return redirect(url_for('user.login'))
 
     return render_template('register.html')
-
 
 @user_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -83,7 +92,6 @@ def login():
         return redirect(url_for('user.login'))
     return render_template('login.html')
 
-
 @user_bp.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
@@ -91,12 +99,10 @@ def logout():
     flash('Logout realizado com sucesso!', 'success')
     return redirect(url_for('index'))
 
-
 @user_bp.route('/dashboard')
 @login_required
 def dashboard():
     return render_template('home.html')
-
 
 @user_bp.route('/editar_senha', methods=['POST', 'GET'])
 @login_required
